@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ruleset name="ETS2Routes">
+    <description>Format rules</description>
+
+    <arg name="colors"/>
+
+    <file>app</file>
+    <file>web</file>
+    <file>modules</file>
+
+    <rule ref="PSR2"></rule>
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="100" />
+            <property name="absoluteLineLimit" value="120" />
+        </properties>
+    </rule>
+</ruleset>
