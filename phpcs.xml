@@ -7,6 +7,7 @@
     <file>app</file>
     <file>web</file>
     <file>modules</file>
+    <file>Tests</file>
 
     <rule ref="PSR2"></rule>
     <rule ref="Generic.Files.LineLength">
