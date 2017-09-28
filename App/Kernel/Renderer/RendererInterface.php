@@ -19,54 +19,55 @@
  *  whether in an action of contract, tort or otherwise, arising from, out of or in
  *  connection with the software or the use or other dealings in the Software.
  */
+namespace App\Kernel\Renderer;
 
-namespace App\Kernel;
-
-use DI\ContainerBuilder;
-use GuzzleHttp\Psr7\ServerRequest;
 use Psr\Http\Message\ResponseInterface;
 
-class App
+/**
+ * Interface RendererInterface
+ * @package App\Kernel\Renderer
+ */
+interface RendererInterface
 {
     /**
-     * @var \DI\Container
+     * Add new path access
+     * @param string $directory
+     * @param string $accessName
      */
-    private $container;
+    public function addPath(string $directory, string $accessName = '__main__'): void;
 
     /**
-     * @var \Psr\Http\Message\ServerRequestInterface
+     * Add new extension
+     * @param string $extensionClass
      */
-    private $request;
-
-    public function __construct()
-    {
-        global $container;
-
-        $builder = new ContainerBuilder();
-        $builder->useAutowiring(true);
-        $container = $builder->build();
-        $this->container = $container;
-
-        $this->request = ServerRequest::fromGlobals();
-    }
+    public function addExtension(string $extensionClass): void;
 
     /**
-     * Execute controller and return a ResponseInterface
-     * @return ResponseInterface
+     * Add new filter
+     * @param string $filterClass
      */
-    public function run()
-    {
-        $router = $this->container->get(RouterFactory::class)::create('App/Config/routes.json');
-        $route = $router->match( $this->request->getServerParams()['REDIRECT_URL'] );
+    public function addFilter(string $filterClass): void;
 
-        $array = explode(':', $route['_controller']);
-        $namespace = $array[0].'\\Controller\\';
-        $controller = $array[1].'Controller';
-        $action = $array[2].'Action';
+    /**
+     * Add new function
+     * @param string $functionClass
+     */
+    public function addFunction(string $functionClass): void;
 
-        $class = $namespace.$controller;
-        $data = new $class();
+    /**
+     * Add global var
+     * @param string $name
+     * @param $value
+     */
+    public function addGlobal(string $name, $value): void;
 
-        return call_user_func_array( [$data, $action], [] );
-    }
+    /**
+     * Parse and return template
+     * @param string $name
+     * @param array $context
+     * @param int $statusCode
+     * @param bool $string
+     * @return ResponseInterface|string
+     */
+    public function render(string $name, array $context = [], int $statusCode = 200, bool $string = false);
 }

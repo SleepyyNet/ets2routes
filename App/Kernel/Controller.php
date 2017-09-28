@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright Christophe Daloz - De Los Rios, 2017
+ *  Copyright Christophe Daloz - De Los RIos, 2017
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the “Software”), to deal
@@ -20,15 +20,21 @@
  *  connection with the software or the use or other dealings in the Software.
  */
 
-namespace App\Controller;
+namespace App\Kernel;
 
-use App\Kernel\Controller;
-use GuzzleHttp\Psr7\Response;
 
-class DefaultController extends Controller
+use App\Kernel\Renderer\TwigRenderer;
+
+class Controller
 {
-    public function indexAction()
+    /**
+     * @var TwigRenderer
+     */
+    protected $renderer;
+
+    public function __construct()
     {
-        return $this->renderer->render('@App/index.html.twig');
+        $this->renderer = new TwigRenderer();
+        $this->renderer->addPath('App/Views', 'App');
     }
 }
