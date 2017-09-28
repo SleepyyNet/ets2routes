@@ -1,4 +1,4 @@
-DirectoryIndex index.php
+DirectoryIndex web/index.php
 
 <IfModule mod_negotiation.c>
     #Options -MultiViews
@@ -41,7 +41,7 @@ DirectoryIndex index.php
     RewriteRule ^ - [L]
 
     # Rewrite all other queries to the front controller.
-    RewriteRule ^ %{ENV:BASE}/index.php [L]
+    RewriteRule ^ %{ENV:BASE}/web/index.php [L]
 </IfModule>
 
 <IfModule !mod_rewrite.c>
@@ -49,7 +49,7 @@ DirectoryIndex index.php
         # When mod_rewrite is not available, we instruct a temporary redirect of
         # the start page to the front controller explicitly so that the website
         # and the generated links can still be used.
-        RedirectMatch 302 ^/$ /index.php/
+        RedirectMatch 302 ^/$ /web/index.php/
         # RedirectTemp cannot be used instead
     </IfModule>
 </IfModule>
