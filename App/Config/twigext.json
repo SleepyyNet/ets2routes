@@ -1,0 +1,5 @@
+{
+  "extensions": [
+    "App\\Kernel\\TwigExtensions\\BaseExtension"
+  ]
+}

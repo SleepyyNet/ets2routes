@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright Christophe Daloz - De Los RIos, 2017
+ *  Copyright Christophe Daloz - De Los Rios, 2017
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the “Software”), to deal
@@ -20,36 +20,25 @@
  *  connection with the software or the use or other dealings in the Software.
  */
 
-namespace App\Kernel;
+namespace App\Kernel\TwigExtensions;
 
-
-use App\Kernel\Renderer\TwigRenderer;
-
-class Controller
+class BaseExtension extends \Twig_Extension
 {
-    /**
-     * @var TwigRenderer
-     */
-    protected $renderer;
-
-    public function __construct()
+    public function getFunctions()
     {
-        $this->renderer = new TwigRenderer();
-        $this->renderer->addPath('App/Views', 'App');
-        
-        $this->getExtensions('App/Config/twigext.json');
+        return [
+            new \Twig_SimpleFunction('img', [$this, 'getImage']),
+            new \Twig_SimpleFunction('css', [$this, 'getCSS']),
+        ];
     }
 
-    /**
-     * Get renderer extensions
-     * @param string $jsonFile
-     */
-    protected function getExtensions(string $jsonFile): void
+    public function getImage(string $name): string
     {
-        $json = json_decode( file_get_contents($jsonFile), true );
+        return 'Resources/Images/'.$name;
+    }
 
-        foreach ($json['extensions'] as $extension) {
-            $this->renderer->addExtension($extension);
-        }
+    public function getCSS(string $name): string
+    {
+        return 'Resources/CSS/'.$name;
     }
 }
