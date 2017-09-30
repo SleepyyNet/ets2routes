@@ -29,6 +29,8 @@ class BaseExtension extends \Twig_Extension
         return [
             new \Twig_SimpleFunction('img', [$this, 'getImage']),
             new \Twig_SimpleFunction('css', [$this, 'getCSS']),
+            new \Twig_SimpleFunction('url', [$this, 'getUrl']),
+            new \Twig_SimpleFunction('path', [$this, 'getUrl']),
         ];
     }
 
@@ -40,5 +42,9 @@ class BaseExtension extends \Twig_Extension
     public function getCSS(string $name): string
     {
         return 'Resources/CSS/'.$name;
+    }
+
+    public function getUrl()
+    {
     }
 }

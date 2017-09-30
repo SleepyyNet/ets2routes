@@ -69,5 +69,10 @@ interface RendererInterface
      * @param bool $string
      * @return ResponseInterface|string
      */
-    public function render(string $name, array $context = [], int $statusCode = 200, bool $string = false);
+    public function render(
+        string $name,
+        array $context = [],
+        int $statusCode = 200,
+        bool $string = false
+    );
 }

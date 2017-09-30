@@ -22,7 +22,6 @@
 
 namespace App\Kernel;
 
-
 use App\Kernel\Renderer\TwigRenderer;
 
 class Controller
@@ -46,7 +45,7 @@ class Controller
      */
     protected function getExtensions(string $jsonFile): void
     {
-        $json = json_decode( file_get_contents($jsonFile), true );
+        $json = json_decode(file_get_contents($jsonFile), true);
 
         foreach ($json['extensions'] as $extension) {
             $this->renderer->addExtension($extension);

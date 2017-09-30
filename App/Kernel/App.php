@@ -57,7 +57,7 @@ class App
     public function run()
     {
         $router = $this->container->get(RouterFactory::class)::create('App/Config/routes.json');
-        $route = $router->match( $this->request->getServerParams()['REDIRECT_URL'] );
+        $route = $router->match($this->request->getServerParams()['REDIRECT_URL']);
 
         $array = explode(':', $route['_controller']);
         $namespace = $array[0].'\\Controller\\';
@@ -67,6 +67,6 @@ class App
         $class = $namespace.$controller;
         $data = new $class();
 
-        return call_user_func_array( [$data, $action], [] );
+        return call_user_func_array([$data, $action], []);
     }
 }

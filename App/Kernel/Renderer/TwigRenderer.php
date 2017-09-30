@@ -63,7 +63,7 @@ class TwigRenderer implements RendererInterface
      */
     public function addExtension(string $extensionClass): void
     {
-        $this->twig->addExtension( new $extensionClass() );
+        $this->twig->addExtension(new $extensionClass());
     }
 
     /**
@@ -72,7 +72,7 @@ class TwigRenderer implements RendererInterface
      */
     public function addFilter(string $filterClass): void
     {
-        $this->twig->addFilter( new $filterClass() );
+        $this->twig->addFilter(new $filterClass());
     }
 
     /**
@@ -81,7 +81,7 @@ class TwigRenderer implements RendererInterface
      */
     public function addFunction(string $functionClass): void
     {
-        $this->twig->addFunction( new $functionClass() );
+        $this->twig->addFunction(new $functionClass());
     }
 
     /**
@@ -102,11 +102,15 @@ class TwigRenderer implements RendererInterface
      * @param bool $string
      * @return ResponseInterface|string
      */
-    public function render(string $name, array $context = [], int $statusCode = 200, bool $string = false)
-    {
+    public function render(
+        string $name,
+        array $context = [],
+        int $statusCode = 200,
+        bool $string = false
+    ) {
         $render = $this->twig->render($name, $context);
 
-        if ( $string ) {
+        if ($string) {
             return $render;
         }
 

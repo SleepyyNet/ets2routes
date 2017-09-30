@@ -9,4 +9,4 @@ require_once 'vendor/autoload.php';
 
 $app = new App();
 
-send( $app->run() );
+send($app->run());

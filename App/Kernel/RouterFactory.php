@@ -39,14 +39,14 @@ class RouterFactory
     public static function create(string $routeFileConf)
     {
         $router = new Router();
-        $json = json_decode( file_get_contents($routeFileConf), true );
+        $json = json_decode(file_get_contents($routeFileConf), true);
 
 
         foreach ($json as $name => $data) {
             $path = $data['path'];
             $controller = $data['controller'];
 
-            $router->addRoute( $name, new Route($path, ['_controller' => $controller]) );
+            $router->addRoute($name, new Route($path, ['_controller' => $controller]));
         }
 
         return $router;
