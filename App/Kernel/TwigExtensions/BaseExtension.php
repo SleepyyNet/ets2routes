@@ -22,8 +22,21 @@
 
 namespace App\Kernel\TwigExtensions;
 
+use App\Kernel\Router\Router;
+use DI\Container;
+
 class BaseExtension extends \Twig_Extension
 {
+    /**
+     * @var Container
+     */
+    private $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
     public function getFunctions()
     {
         return [

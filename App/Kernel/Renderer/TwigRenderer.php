@@ -22,6 +22,7 @@
 
 namespace App\Kernel\Renderer;
 
+use DI\Container;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 
@@ -41,8 +42,15 @@ class TwigRenderer implements RendererInterface
      */
     private $loader;
 
-    public function __construct()
+    /**
+     * @var Container
+     */
+    private $container;
+
+    public function __construct(Container $container)
     {
+        $this->container = $container;
+
         $this->loader = new \Twig_Loader_Filesystem();
         $this->twig = new \Twig_Environment($this->loader);
     }
@@ -63,7 +71,7 @@ class TwigRenderer implements RendererInterface
      */
     public function addExtension(string $extensionClass): void
     {
-        $this->twig->addExtension(new $extensionClass());
+        $this->twig->addExtension(new $extensionClass($this->container));
     }
 
     /**

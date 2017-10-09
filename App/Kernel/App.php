@@ -65,7 +65,7 @@ class App
         $action = $array[2].'Action';
 
         $class = $namespace.$controller;
-        $data = new $class();
+        $data = new $class($this->container);
 
         return call_user_func_array([$data, $action], []);
     }

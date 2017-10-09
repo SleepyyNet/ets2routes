@@ -23,6 +23,7 @@
 namespace App\Kernel;
 
 use App\Kernel\Renderer\TwigRenderer;
+use DI\Container;
 
 class Controller
 {
@@ -31,9 +32,16 @@ class Controller
      */
     protected $renderer;
 
-    public function __construct()
+    /**
+     * @var Container
+     */
+    protected $container;
+
+    public function __construct(Container $container)
     {
-        $this->renderer = new TwigRenderer();
+        $this->container = $container;
+
+        $this->renderer = new TwigRenderer($this->container);
         $this->renderer->addPath('App/Views', 'App');
         
         $this->getExtensions('App/Config/twigext.json');
