@@ -1,0 +1,13 @@
+{
+  "form": {
+    "user": {
+      "login": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "mail": "E-mail",
+      "check": "J'accepte les ",
+      "tos": "Conditions Générales d'Utilisation",
+      "register": "S'inscrire",
+      "msg": "En vous inscrivant, vous vous engagez à respecter les règles édictées dans les CGU. Toute transgression pourra entraîner des sanctions."
+    }
+  }
+}

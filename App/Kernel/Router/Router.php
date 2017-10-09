@@ -104,7 +104,7 @@ class Router
     {
         $path = $this->urlGenerator->generate($routeName, $parameters, $type);
 
-        if ( substr($path, -1) === '/' ) {
+        if (substr($path, -1) === '/') {
             return substr($path, 0, -1);
         }
 

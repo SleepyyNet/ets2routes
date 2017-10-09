@@ -6,5 +6,9 @@
   "user_register": {
     "path": "/user/register",
     "controller": "App:User:register"
+  },
+  "user_tos": {
+    "path": "/user/tos",
+    "controller": "App:User:tos"
   }
 }

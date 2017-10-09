@@ -23,3 +23,7 @@ body {
     margin-top: 1% !important;
     margin-bottom: 1% !important;
 }
+
+.row {
+    margin-bottom: 1%;
+}

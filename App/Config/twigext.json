@@ -1,5 +1,6 @@
 {
   "extensions": [
-    "App\\Kernel\\TwigExtensions\\BaseExtension"
+    "App\\Kernel\\TwigExtensions\\BaseExtension",
+    "App\\Kernel\\TwigExtensions\\LangExtension"
   ]
 }
