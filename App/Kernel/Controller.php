@@ -55,7 +55,7 @@ class Controller
     {
         $json = json_decode(file_get_contents($jsonFile), true);
 
-        foreach ($json['extensions'] as $extension) {
+        foreach ($json['extensions'] as $name => $extension) {
             $this->renderer->addExtension($extension);
         }
     }

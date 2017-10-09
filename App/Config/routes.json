@@ -2,5 +2,9 @@
   "index": {
     "path": "/",
     "controller": "App:Default:index"
+  },
+  "user_register": {
+    "path": "/user/register",
+    "controller": "App:User:register"
   }
 }

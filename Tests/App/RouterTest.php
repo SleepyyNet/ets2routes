@@ -69,7 +69,7 @@ class RouterTest extends TestCase
         $this->setTestRoute('/test');
 
         $uri = $this->router->generateUri('index', [], 0);
-        $this->assertEquals('http://localhost/test', $uri);
+        $this->assertEquals('http://localhost/ets2routes/test', $uri);
     }
 
     public function testMatchByName()
@@ -86,6 +86,22 @@ class RouterTest extends TestCase
 
         $route = $this->router->get('bouh');
         $this->assertNotInstanceOf(Route::class, $route);
+    }
+
+    public function testGenerateRouteIndex()
+    {
+        $this->setTestRoute('/', 'index');
+
+        $path = $this->router->generateUri('index', [], 1);
+        $this->assertEquals('', $path);
+    }
+
+    public function testGenerateRouteIndexAbsolute()
+    {
+        $this->setTestRoute('/', 'index');
+
+        $path = $this->router->generateUri('index', []);
+        $this->assertEquals('http://localhost/ets2routes', $path);
     }
 
     private function setTestRoute(string $path = '/', string $name = 'index')

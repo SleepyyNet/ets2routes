@@ -20,46 +20,14 @@
  *  connection with the software or the use or other dealings in the Software.
  */
 
-namespace App\Kernel\TwigExtensions;
+namespace App\Controller;
 
-use App\Kernel\RouterFactory;
-use DI\Container;
+use App\Kernel\Controller;
 
-class BaseExtension extends \Twig_Extension
+class UserController extends Controller
 {
-    /**
-     * @var Container
-     */
-    private $container;
-
-    public function __construct(Container $container)
+    public function registerAction()
     {
-        $this->container = $container;
-    }
-
-    public function getFunctions()
-    {
-        return [
-            new \Twig_SimpleFunction('img', [$this, 'getImage']),
-            new \Twig_SimpleFunction('css', [$this, 'getCSS']),
-            new \Twig_SimpleFunction('url', [$this, 'getUrl']),
-            new \Twig_SimpleFunction('path', [$this, 'getUrl']),
-        ];
-    }
-
-    public function getImage(string $name): string
-    {
-        return '/Resources/Images/'.$name;
-    }
-
-    public function getCSS(string $name): string
-    {
-        return '/Resources/CSS/'.$name;
-    }
-
-    public function getUrl(string $routeName, array $parameters = [])
-    {
-        $router = $this->container->get(RouterFactory::class)::create('App/Config/routes.json');
-        return $router->generateUri($routeName, $parameters);
+        return $this->renderer->render('@App/User/register.html.twig');
     }
 }

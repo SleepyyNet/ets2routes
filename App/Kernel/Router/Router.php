@@ -43,9 +43,9 @@ class Router
 
     public function __construct()
     {
-        $host = ( isset($_SERVER['HTTP_HOST']) ) ?: 'localhost';
+        $host = ( isset($_SERVER['HTTP_HOST']) ) ? $_SERVER['HTTP_HOST'] : 'localhost/ets2routes';
         $scheme = ( !empty($_SERVER['HTTPS']) ) ? 'https' : 'http';
-        $queryString = ( isset($_SERVER['QUERY_STRING']) ) ?: '/';
+        $queryString = ( isset($_SERVER['QUERY_STRING']) ) ?: '';
 
         $this->routes = new RouteCollection();
         $this->context = new RequestContext(
@@ -102,6 +102,12 @@ class Router
      */
     public function generateUri(string $routeName, array $parameters = [], int $type = 0): string
     {
-        return $this->urlGenerator->generate($routeName, $parameters, $type);
+        $path = $this->urlGenerator->generate($routeName, $parameters, $type);
+
+        if ( substr($path, -1) === '/' ) {
+            return substr($path, 0, -1);
+        }
+
+        return $path;
     }
 }
