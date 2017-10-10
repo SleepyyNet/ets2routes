@@ -22,12 +22,28 @@
 
 namespace App\Controller;
 
+use App\Kernel\CheckForm\CheckForm;
 use App\Kernel\Controller;
+use App\Kernel\SuperGlobals\SuperGlobals;
 
 class UserController extends Controller
 {
+    /**
+     * Create new user
+     * @return \Psr\Http\Message\ResponseInterface
+     */
     public function registerAction()
     {
+        $globals = $this->container->get(SuperGlobals::class);
+
+        if ($globals->post()->isSubmit()) {
+            $check = new CheckForm($this->container);
+
+            if (!$check->check('App/Config/Forms/user_register.json')) {
+                //TODO : Redirect to form with error
+            }
+        }
+
         return $this->renderer->render('@App/User/register.html.twig');
     }
 }

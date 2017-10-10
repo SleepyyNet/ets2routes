@@ -44,6 +44,7 @@ class App
 
         $builder = new ContainerBuilder();
         $builder->useAutowiring(true);
+        $builder->addDefinitions('App/Config/injection.php');
         $container = $builder->build();
         $this->container = $container;
 

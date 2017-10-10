@@ -36,7 +36,7 @@ class SessionGlobal
      */
     public function get(string $key)
     {
-        if ( isset($_SESSION[$this->siteKey][$key]) ) {
+        if (isset($_SESSION[$this->siteKey][$key])) {
             return $_SESSION[$this->siteKey][$key];
         }
 
@@ -50,5 +50,49 @@ class SessionGlobal
     public function set(string $key, $val): void
     {
         $_SESSION[$this->siteKey][$key] = $val;
+    }
+
+    /**
+     * @param string $message
+     */
+    public function setSuccess(string $message): void
+    {
+        $_SESSION[$this->siteKey]['msg']['type'] = 'success';
+        $_SESSION[$this->siteKey]['msg']['message'] = $message;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSuccess(): array
+    {
+        return [
+            'type' => $_SESSION[$this->siteKey]['msg']['type'],
+            'message' => $_SESSION[$this->siteKey]['msg']['message']
+        ];
+
+        unset($_SESSION[$this->siteKey]['msg']);
+    }
+
+    /**
+     * @param string $message
+     */
+    public function setError(string $message): void
+    {
+        $_SESSION[$this->siteKey]['msg']['type'] = 'danger';
+        $_SESSION[$this->siteKey]['msg']['message'] = $message;
+    }
+
+    /**
+     * @return array
+     */
+    public function getError(): array
+    {
+        return [
+            'type' => $_SESSION[$this->siteKey]['msg']['type'],
+            'message' => $_SESSION[$this->siteKey]['msg']['message']
+        ];
+
+        unset($_SESSION[$this->siteKey]['msg']);
     }
 }

@@ -35,7 +35,7 @@ class PostGlobal
      */
     public function get($key)
     {
-        if ( isset($_POST[$key]) ) {
+        if (isset($_POST[$key])) {
             return $_POST[$key];
         }
 
@@ -43,10 +43,18 @@ class PostGlobal
     }
 
     /**
+     * @return bool
+     */
+    public function isSubmit(): bool
+    {
+        return !empty($_POST);
+    }
+
+    /**
      * @param $key
      * @return bool
      */
-    public function is_null($key): bool
+    public function isNull($key): bool
     {
         return is_null($_POST[$key]);
     }
@@ -55,7 +63,7 @@ class PostGlobal
      * @param $key
      * @return bool
      */
-    public function is_int($key): bool
+    public function isInt($key): bool
     {
         return is_int($_POST[$key]);
     }
@@ -64,7 +72,7 @@ class PostGlobal
      * @param $key
      * @return bool
      */
-    public function is_bool($key): bool
+    public function isBool($key): bool
     {
         return is_bool($_POST[$key]);
     }
@@ -73,7 +81,7 @@ class PostGlobal
      * @param $key
      * @return bool
      */
-    public function is_string($key): bool
+    public function isString($key): bool
     {
         return is_string($_POST[$key]);
     }
@@ -82,7 +90,7 @@ class PostGlobal
  * @param $key
  * @return bool
  */
-    public function is_numeric($key): bool
+    public function isNumeric($key): bool
     {
         return is_numeric($_POST[$key]);
     }
@@ -91,7 +99,7 @@ class PostGlobal
      * @param $key
      * @return bool
      */
-    public function is_float($key): bool
+    public function isFloat($key): bool
     {
         return is_float($_POST[$key]);
     }
