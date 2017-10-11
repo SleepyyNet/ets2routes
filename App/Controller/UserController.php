@@ -24,6 +24,7 @@ namespace App\Controller;
 
 use App\Kernel\CheckForm\CheckForm;
 use App\Kernel\Controller;
+use App\Entity\User;
 use App\Kernel\SuperGlobals\SuperGlobals;
 
 class UserController extends Controller
@@ -42,6 +43,27 @@ class UserController extends Controller
             if (!$check->check('App/Config/Forms/user_register.json')) {
                 //TODO : Redirect to form with error
             }
+
+            $user = new User();
+            $user
+                ->setLogin($globals->post()->get('login'))
+                ->setPassword(hash('sha256', $globals->post()->get('password')))
+                ->setMail($globals->post()->get('mail'))
+                ->setUserGroup(1);
+
+            if ($this->entityManager->execute($user)) {
+                $globals->session()->setFlashMessage(
+                    'success',
+                    $this->translation->translate('flash.register.success')
+                );
+
+                return $this->redirectToRoute('index');
+            }
+
+            $globals->session()->setFlashMessage(
+                'error',
+                $this->translation->translate('flash.register.error')
+            );
         }
 
         return $this->renderer->render('@App/User/register.html.twig');

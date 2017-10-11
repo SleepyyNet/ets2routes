@@ -31,6 +31,7 @@ class SessionGlobal
     private $siteKey = 'ETS2Routes';
 
     /**
+     * Get information in session
      * @param $key
      * @return mixed|null
      */
@@ -44,6 +45,7 @@ class SessionGlobal
     }
 
     /**
+     * Set information in session
      * @param string $key
      * @param $val
      */
@@ -53,46 +55,42 @@ class SessionGlobal
     }
 
     /**
+     * Set flash message
+     * @param string $type
      * @param string $message
      */
-    public function setSuccess(string $message): void
+    public function setFlashMessage(string $type, string $message): void
     {
-        $_SESSION[$this->siteKey]['msg']['type'] = 'success';
-        $_SESSION[$this->siteKey]['msg']['message'] = $message;
+        $_SESSION[$this->siteKey]['_flash'] = $message;
+        $_SESSION[$this->siteKey]['_flashtype'] = $type;
     }
 
     /**
-     * @return array
+     * Get flash message
+     * @return string
      */
-    public function getSuccess(): array
+    public function getFlashMessage(): string
     {
-        return [
-            'type' => $_SESSION[$this->siteKey]['msg']['type'],
-            'message' => $_SESSION[$this->siteKey]['msg']['message']
-        ];
+        if (isset($_SESSION[$this->siteKey]['_flash'])) {
+            $flash = $_SESSION[$this->siteKey]['_flash'];
+            unset($_SESSION[$this->siteKey]['_flash'], $_SESSION[$this->siteKey]['_flashtype']);
+        } else {
+            $flash = '';
+        }
 
-        unset($_SESSION[$this->siteKey]['msg']);
+        return $flash;
     }
 
     /**
-     * @param string $message
+     * get type of actual flash message
+     * @return string
      */
-    public function setError(string $message): void
+    public function getTypeFlashMessage(): string
     {
-        $_SESSION[$this->siteKey]['msg']['type'] = 'danger';
-        $_SESSION[$this->siteKey]['msg']['message'] = $message;
-    }
+        if (isset($_SESSION[$this->siteKey]['_flashtype'])) {
+            return $_SESSION[$this->siteKey]['_flashtype'];
+        }
 
-    /**
-     * @return array
-     */
-    public function getError(): array
-    {
-        return [
-            'type' => $_SESSION[$this->siteKey]['msg']['type'],
-            'message' => $_SESSION[$this->siteKey]['msg']['message']
-        ];
-
-        unset($_SESSION[$this->siteKey]['msg']);
+        return '';
     }
 }

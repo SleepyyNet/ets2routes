@@ -20,41 +20,59 @@
  *  connection with the software or the use or other dealings in the Software.
  */
 
-namespace App\Kernel\TwigExtensions;
+namespace App\Kernel\Lang;
 
-use App\Kernel\Lang\LangManager;
-use DI\Container;
-
-/**
- * Class LangExtension
- * @package App\Kernel\TwigExtensions
- */
-class LangExtension extends \Twig_Extension
+class LangManager
 {
+    private $translation;
+
+    public function __construct(string $lang)
+    {
+        $this->load('App/Config/Lang/'.$lang.'.json');
+    }
+
     /**
-     * @var Container
+     * Load selected language file
+     * @param string $filename
      */
-    private $container;
-
-    public function __construct(Container $container)
+    public function load(string $filename)
     {
-        $this->container = $container;
-    }
-
-    public function getFunctions()
-    {
-        return [
-            new \Twig_SimpleFunction('tr', [$this, 'translate'], ['is_safe' => ['html']]),
-        ];
+        $this->translation = json_decode(file_get_contents($filename), true);
     }
 
     /**
+     * Get translation text
      * @param string $code
      * @return mixed|string
      */
     public function translate(string $code)
     {
-        $translation = $this->container->get(LangManager::class);
-        return $translation->translate($code);
+        $arrayCode = explode('.', $code);
+        $text = $this->translation;
+
+        foreach ($arrayCode as $val) {
+            if (!$this->checkTr($text, $val)) {
+                return $code;
+            }
+
+            $text = $text[$val];
+        }
+
+        return $text;
+    }
+
+    /**
+     * Check if translation is exist
+     * @param array $array
+     * @param string $key
+     * @return bool
+     */
+    private function checkTr(array $array, string $key): bool
+    {
+        if (isset($array[$key])) {
+            return true;
+        }
+
+        return false;
     }
 }

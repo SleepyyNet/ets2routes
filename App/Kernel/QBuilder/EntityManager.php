@@ -35,14 +35,14 @@ class EntityManager
 
     public function __construct(\PDO $pdo)
     {
-        $this->builder = new QBuilder( $pdo );
+        $this->builder = new QBuilder($pdo);
     }
 
     public function execute($entity)
     {
-        $this->definitionFile( get_class($entity) );
+        $this->definitionFile(get_class($entity));
 
-        if ( !is_null($entity->getId()) ) {
+        if (!is_null($entity->getId())) {
             $bool = $this->update($entity);
         } else {
             $bool = $this->save($entity);
@@ -67,12 +67,11 @@ class EntityManager
 
     public function update($entity)
     {
-
     }
 
     private function definitionFile(string $className)
     {
         $file = basename($className);
-        $this->def = json_decode( file_get_contents('App/Config/Entity/'.$file.'.json'), true )[$file];
+        $this->def = json_decode(file_get_contents('App/Config/Entity/'.$file.'.json'), true)[$file];
     }
 }

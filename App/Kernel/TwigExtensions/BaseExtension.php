@@ -23,6 +23,7 @@
 namespace App\Kernel\TwigExtensions;
 
 use App\Kernel\RouterFactory;
+use App\Kernel\SuperGlobals\SuperGlobals;
 use DI\Container;
 
 class BaseExtension extends \Twig_Extension
@@ -32,9 +33,15 @@ class BaseExtension extends \Twig_Extension
      */
     private $container;
 
+    /**
+     * @var SuperGlobals
+     */
+    private $globals;
+
     public function __construct(Container $container)
     {
         $this->container = $container;
+        $this->globals = $this->container->get(SuperGlobals::class);
     }
 
     public function getFunctions()
@@ -44,6 +51,8 @@ class BaseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('css', [$this, 'getCSS']),
             new \Twig_SimpleFunction('url', [$this, 'getUrl']),
             new \Twig_SimpleFunction('path', [$this, 'getUrl']),
+            new \Twig_SimpleFunction('flash', [$this, 'getFlashMessage']),
+            new \Twig_SimpleFunction('flashType', [$this, 'getFlashType']),
         ];
     }
 
@@ -61,5 +70,15 @@ class BaseExtension extends \Twig_Extension
     {
         $router = $this->container->get(RouterFactory::class)::create('App/Config/routes.json');
         return $router->generateUri($routeName, $parameters);
+    }
+
+    public function getFlashMessage(): string
+    {
+        return $this->globals->session()->getFlashMessage();
+    }
+
+    public function getFlashType(): string
+    {
+        return $this->globals->session()->getTypeFlashMessage();
     }
 }

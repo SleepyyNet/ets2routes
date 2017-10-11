@@ -12,6 +12,14 @@
 
     <body class="container-fluid">
         {% include '@App/Base/header.html.twig' %}
+
+        {% if flashType() == 'error' %}
+            <div class="alert alert-danger col-md-6 col-md-offset-3">{{ flash() }}</div>
+        {% elseif flashType() == 'success' %}
+            <div class="alert alert-success col-md-6 col-md-offset-3">{{ flash() }}</div>
+        {% endif %}
+
+
         {% block body %}{% endblock %}
         {% include '@App/Base/footer.html.twig' %}
     </body>

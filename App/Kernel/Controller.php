@@ -22,9 +22,12 @@
 
 namespace App\Kernel;
 
+use App\Kernel\Lang\LangManager;
 use App\Kernel\QBuilder\EntityManager;
 use App\Kernel\Renderer\TwigRenderer;
+use App\Kernel\Router\Router;
 use DI\Container;
+use GuzzleHttp\Psr7\Response;
 
 class Controller
 {
@@ -43,16 +46,51 @@ class Controller
      */
     protected $container;
 
+    /**
+     * @var LangManager
+     */
+    protected $translation;
+
+    /**
+     * @var Router
+     */
+    protected $router;
+
     public function __construct(Container $container)
     {
         $this->container = $container;
-
         $this->entityManager = $container->get(EntityManager::class);
+
+        $this->translation = $container->get(LangManager::class);
+        $this->router = $container->get(RouterFactory::class)::create('App/Config/routes.json');
 
         $this->renderer = new TwigRenderer($this->container);
         $this->renderer->addPath('App/Views', 'App');
         
         $this->getExtensions('App/Config/twigext.json');
+    }
+
+    /**
+     * Redirect to selected route with statusCode
+     * @param string $routeName
+     * @param array $parameters
+     * @param int $statusCode
+     * @return Response
+     */
+    public function redirectToRoute(string $routeName, array $parameters = [], int $statusCode = 200)
+    {
+        return new Response($statusCode, ['location' => $this->router->generateUri($routeName, $parameters)]);
+    }
+
+    /**
+     * Redirect to URI with statusCode
+     * @param string $uri
+     * @param int $statusCode
+     * @return Response
+     */
+    public function redirect(string $uri, int $statusCode = 200)
+    {
+        return new Response($statusCode, ['location' => $uri]);
     }
 
     /**

@@ -12,7 +12,6 @@
     <rule ref="PSR2"></rule>
     <rule ref="Generic.Files.LineLength">
         <properties>
-            <property name="lineLimit" value="100" />
             <property name="absoluteLineLimit" value="120" />
         </properties>
     </rule>
