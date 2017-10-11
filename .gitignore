@@ -1,5 +1,6 @@
 *.iml
 composer.lock
 Tests/App/database.json
+App/Config/parameters.json
 .idea/
 vendor/

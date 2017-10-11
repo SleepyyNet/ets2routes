@@ -1,0 +1,9 @@
+{
+  "database": {
+    "host": "localhost",
+    "user": "",
+    "password": "",
+    "port": 3306,
+    "dbname": "ets2routes"
+  }
+}

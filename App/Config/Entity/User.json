@@ -1,0 +1,43 @@
+{
+  "User": {
+    "name": "user",
+    "entity": {
+      "id": {
+        "name": "id",
+        "type": "int"
+      },
+      "userGroup": {
+        "name": "user_group",
+        "type": "int"
+      },
+      "login": {
+        "name": "login",
+        "type": "string"
+      },
+      "password": {
+        "name": "password",
+        "type": "string"
+      },
+      "mail": {
+        "name": "mail",
+        "type": "string"
+      },
+      "validationCode": {
+        "name": "validation_code",
+        "type": "string"
+      },
+      "registerDate": {
+        "name": "register_date",
+        "type": "string"
+      },
+      "lastLogin": {
+        "name": "last_login",
+        "type": "string"
+      },
+      "validate": {
+        "name": "validate",
+        "type": "int"
+      }
+    }
+  }
+}

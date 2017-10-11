@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright Christophe Daloz - De Los RIos, 2017
+ *  Copyright Christophe Daloz - De Los Rios, 2017
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the “Software”), to deal
@@ -20,51 +20,59 @@
  *  connection with the software or the use or other dealings in the Software.
  */
 
-namespace App\Kernel;
+namespace App\Kernel\QBuilder;
 
-use App\Kernel\QBuilder\EntityManager;
-use App\Kernel\Renderer\TwigRenderer;
 use DI\Container;
 
-class Controller
+class EntityManager
 {
     /**
-     * @var TwigRenderer
+     * @var QBuilder
      */
-    protected $renderer;
+    private $builder;
 
-    /**
-     * @var EntityManager
-     */
-    protected $entityManager;
+    private $def;
 
-    /**
-     * @var Container
-     */
-    protected $container;
-
-    public function __construct(Container $container)
+    public function __construct(\PDO $pdo)
     {
-        $this->container = $container;
-
-        $this->entityManager = $container->get(EntityManager::class);
-
-        $this->renderer = new TwigRenderer($this->container);
-        $this->renderer->addPath('App/Views', 'App');
-        
-        $this->getExtensions('App/Config/twigext.json');
+        $this->builder = new QBuilder( $pdo );
     }
 
-    /**
-     * Get renderer extensions
-     * @param string $jsonFile
-     */
-    protected function getExtensions(string $jsonFile): void
+    public function execute($entity)
     {
-        $json = json_decode(file_get_contents($jsonFile), true);
+        $this->definitionFile( get_class($entity) );
 
-        foreach ($json['extensions'] as $name => $extension) {
-            $this->renderer->addExtension($extension);
+        if ( !is_null($entity->getId()) ) {
+            $bool = $this->update($entity);
+        } else {
+            $bool = $this->save($entity);
         }
+
+        $this->def = null;
+
+        return $bool;
+    }
+
+    public function save($entity)
+    {
+        $insert = $this->builder->insert($this->def['name']);
+
+        foreach ($this->def['entity'] as $field => $data) {
+            $method = 'get'.ucfirst($field);
+            $insert->addField($data['name'], $entity->$method());
+        }
+
+        return $insert->execute();
+    }
+
+    public function update($entity)
+    {
+
+    }
+
+    private function definitionFile(string $className)
+    {
+        $file = basename($className);
+        $this->def = json_decode( file_get_contents('App/Config/Entity/'.$file.'.json'), true )[$file];
     }
 }
