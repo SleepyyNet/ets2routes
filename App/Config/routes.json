@@ -10,5 +10,15 @@
   "user_tos": {
     "path": "/user/tos",
     "controller": "App:User:tos"
+  },
+  "user_validation": {
+    "path": "/user/validation/{code}",
+    "controller": "App:User:validation",
+    "requirements": {
+      "code": "[a-f0-9]{32}"
+    },
+    "defaults": {
+      "code": null
+    }
   }
 }

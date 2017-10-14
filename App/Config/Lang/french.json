@@ -21,5 +21,8 @@
       "maxlength": "Le champ <b>%s</b> doit faire au maximum <b>%d</b> caractères",
       "minlength": "Le champ <b>%s</b> doit faire au minimum <b>%d</b> caractères"
     }
+  },
+  "register": {
+    "mail": "Inscription sur ETS2Routes"
   }
 }

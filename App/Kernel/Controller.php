@@ -56,6 +56,11 @@ class Controller
      */
     protected $router;
 
+    /**
+     * @var array
+     */
+    protected $parameters;
+
     public function __construct(Container $container)
     {
         $this->container = $container;
@@ -68,6 +73,7 @@ class Controller
         $this->renderer->addPath('App/Views', 'App');
         
         $this->getExtensions('App/Config/twigext.json');
+        $this->parameters = $container->get('parameters');
     }
 
     /**
@@ -91,6 +97,16 @@ class Controller
     public function redirect(string $uri, int $statusCode = 200)
     {
         return new Response($statusCode, ['location' => $uri]);
+    }
+
+    /**
+     * Generate code
+     * @param int $length
+     * @return string
+     */
+    public function generateCode(int $length)
+    {
+        return bin2hex(random_bytes(($length/2)));
     }
 
     /**

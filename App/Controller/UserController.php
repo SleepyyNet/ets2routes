@@ -25,6 +25,7 @@ namespace App\Controller;
 use App\Kernel\CheckForm\CheckForm;
 use App\Kernel\Controller;
 use App\Entity\User;
+use App\Kernel\Mailer\Mailer;
 use App\Kernel\SuperGlobals\SuperGlobals;
 
 class UserController extends Controller
@@ -41,7 +42,13 @@ class UserController extends Controller
             $check = new CheckForm($this->container);
 
             if (!$check->check('App/Config/Forms/user_register.json')) {
-                return $this->renderer->render('@App/User/register.html.twig');
+                $login = $globals->post()->get('login');
+                $mail = $globals->post()->get('mail');
+
+                return $this->renderer->render(
+                    '@App/User/register.html.twig',
+                    ['login' => $login, 'mail' => $mail]
+                );
             }
 
             $user = new User();
@@ -49,9 +56,26 @@ class UserController extends Controller
                 ->setLogin($globals->post()->get('login'))
                 ->setPassword(hash('sha256', $globals->post()->get('password')))
                 ->setMail($globals->post()->get('mail'))
-                ->setUserGroup(1);
+                ->setUserGroup(1)
+                ->setValidationCode($this->generateCode(32));
 
             if ($this->entityManager->execute($user)) {
+                $mailer = new Mailer();
+                $mailer->addCustomHeader('Reply-To', $this->parameters['mail']['sender']);
+                $mailer->addAddress($user->getMail());
+                $mailer->setFrom($this->parameters['mail']['sender'], $this->parameters['mail']['sendername']);
+                $mailer->setSubject($this->translation->translate('register.mail'));
+                $mailer->setMessage($this->renderer->render(
+                    '@App/User/register_mail.html.twig',
+                    [
+                        'username' => $user->getLogin(),
+                        'validation_code' => $user->getValidationCode()
+                    ],
+                    200,
+                    true
+                ));
+                $mailer->send();
+
                 $globals->session()->setFlashMessage(
                     'success',
                     $this->translation->translate('flash.register.success')
@@ -64,8 +88,19 @@ class UserController extends Controller
                 'error',
                 $this->translation->translate('flash.register.error')
             );
+
+            return $this->redirectToRoute('index');
         }
 
         return $this->renderer->render('@App/User/register.html.twig');
+    }
+
+    /**
+     * Terms of Service
+     * @return \Psr\Http\Message\ResponseInterface|string
+     */
+    public function tosAction()
+    {
+        return $this->renderer->render('@App/User/tos.html.twig');
     }
 }

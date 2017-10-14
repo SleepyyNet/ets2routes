@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+    </head>
+
+    <body>
+        <p>
+            Bonjour <b>{{ username }}</b>,
+        </p>
+
+        <p>
+            Vous venez de créer un compte sur le site ETS2Routes et nous vous en remercions.<br>
+            Pour confirmer votre inscription, merci de cliquer sur le
+            <a href="{{ path('user_validation', {'code': validation_code}, 'absolute') }}">lien de validation</a>.
+        </p>
+
+        <p>
+            Vous pouvez si vous le désirez, vous rendre sur le site et vous connecter avec votre compte.
+            Le système vous demandera alors le code suivant : <b>{{ validation_code }}</b>, plutôt que d'utiliser
+            le lien de validation.
+        </p>
+
+        <p>
+            A nouveau, nous vous remercions pour votre inscription et nous espérons que le site vous plaira.
+        </p>
+
+        <p>
+            Si vous recevez ce message alors que vous n'avez rien demandé, merci de nous en informer
+            le plus rapidement possible, afin que nous puissions prendre les mesures qui s'imposent.
+        </p>
+
+        <p>
+            Cordialement, l'administrateur du site ETS2Routes.
+        </p>
+    </body>
+</html>

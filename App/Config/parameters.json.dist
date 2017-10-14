@@ -6,5 +6,10 @@
     "port": 3306,
     "dbname": "ets2routes"
   },
-  "lang": "french"
+  "lang": "french",
+  "mail": {
+    "sender": "",
+    "sendername": "",
+    "administrator": ""
+  }
 }

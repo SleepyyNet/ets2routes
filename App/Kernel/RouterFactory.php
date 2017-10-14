@@ -44,9 +44,22 @@ class RouterFactory
 
         foreach ($json as $name => $data) {
             $path = $data['path'];
-            $controller = $data['controller'];
+            $requirements = [];
+            $defaults['_controller'] = $data['controller'];
 
-            $router->addRoute($name, new Route($path, ['_controller' => $controller]));
+            if (isset($data['arguments'])) {
+                foreach ($data['arguments'] as $key => $value) {
+                    $requirements[$key] = $value;
+                }
+            }
+
+            if (isset($data['defaults'])) {
+                foreach ($data['defaults'] as $key => $value) {
+                    $defaults[$key] = $value;
+                }
+            }
+
+            $router->addRoute($name, new Route($path, $defaults, $requirements));
         }
 
         return $router;

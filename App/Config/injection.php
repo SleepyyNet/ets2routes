@@ -10,6 +10,7 @@ use function DI\object;
 $json = json_decode(file_get_contents('App/Config/parameters.json'), true);
 
 return [
+    'parameters' => $json,
     \PDO::class => \DI\object()->constructor(
         'mysql:dbname='.$json['database']['dbname'].';host='.
             $json['database']['host'].';port='.$json['database']['port'],
