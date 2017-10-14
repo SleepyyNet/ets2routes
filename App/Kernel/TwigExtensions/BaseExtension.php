@@ -51,7 +51,7 @@ class BaseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('css', [$this, 'getCSS']),
             new \Twig_SimpleFunction('url', [$this, 'getUrl']),
             new \Twig_SimpleFunction('path', [$this, 'getUrl']),
-            new \Twig_SimpleFunction('flash', [$this, 'getFlashMessage']),
+            new \Twig_SimpleFunction('flash', [$this, 'getFlashMessage'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('flashType', [$this, 'getFlashType']),
         ];
     }

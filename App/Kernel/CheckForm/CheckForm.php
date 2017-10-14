@@ -22,16 +22,26 @@
 
 namespace App\Kernel\CheckForm;
 
+use App\Kernel\Lang\LangManager;
 use App\Kernel\SuperGlobals\SuperGlobals;
 use DI\Container;
 
 class CheckForm
 {
+    /**
+     * @var SuperGlobals
+     */
     private $globals;
+
+    /**
+     * @var LangManager
+     */
+    private $translation;
 
     public function __construct(Container $container)
     {
         $this->globals = $container->get(SuperGlobals::class);
+        $this->translation = $container->get(LangManager::class);
     }
 
     /**
@@ -62,8 +72,9 @@ class CheckForm
     private function maxlength($value, int $size): bool
     {
         if (strlen($this->globals->post()->get($value)) > $size) {
-            $this->globals->session()->setError(
-                'Le champ <b>'.$value.'</b> doit faire au maximum '.$size.' caractères'
+            $this->globals->session()->setFlashMessage(
+                'error',
+                sprintf($this->translation->translate('check.form.maxlength'), $value, $size)
             );
             return false;
         }
@@ -79,8 +90,9 @@ class CheckForm
     private function minlength($value, int $size): bool
     {
         if (strlen($this->globals->post()->get($value)) < $size) {
-            $this->globals->session()->setError(
-                'Le champ <b>'.$value.'</b> doit faire au minimum '.$size.' caractères'
+            $this->globals->session()->setFlashMessage(
+                'error',
+                sprintf($this->translation->translate('check.form.minlength'), $value, $size)
             );
             return false;
         }

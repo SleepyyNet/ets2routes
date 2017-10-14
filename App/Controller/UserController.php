@@ -41,7 +41,7 @@ class UserController extends Controller
             $check = new CheckForm($this->container);
 
             if (!$check->check('App/Config/Forms/user_register.json')) {
-                //TODO : Redirect to form with error
+                return $this->renderer->render('@App/User/register.html.twig');
             }
 
             $user = new User();

@@ -15,5 +15,11 @@
       "success": "Votre inscription a bien été effectuée, veuillez consulter votre adresse e-mail afin de procéder à la validation de votre compte.",
       "error": "L'inscription n'a pu être faite, merci de réessayer plus tard ou de contacter l'administrateur."
     }
+  },
+  "check": {
+    "form": {
+      "maxlength": "Le champ <b>%s</b> doit faire au maximum <b>%d</b> caractères",
+      "minlength": "Le champ <b>%s</b> doit faire au minimum <b>%d</b> caractères"
+    }
   }
 }
