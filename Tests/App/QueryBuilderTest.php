@@ -58,4 +58,48 @@ class QueryBuilderTest extends TestCase
         $insert->addField('login', 'Test')->addField('password', 'test');
         $this->assertTrue($insert->execute());
     }
+
+    public function testSelectAll()
+    {
+        $select = $this->builder->select('select');
+        $select
+            ->addField('*')
+            ->execute();
+        $this->assertCount(3, $select->fetchAll());
+    }
+
+    public function testSelectById()
+    {
+        $select = $this->builder->select('select');
+        $select
+            ->addField('*')
+            ->addWhere('id', 1)
+            ->execute();
+        $array = $select->fetch();
+        $this->assertEquals(1, $array['id']);
+    }
+
+    public function testSelectByOneField()
+    {
+        $select = $this->builder->select('select');
+        $select
+            ->addField('*')
+            ->addWhere('field3', 'Test')
+            ->execute();
+        $array = $select->fetchAll();
+        $this->assertCount(3, $array);
+    }
+
+    public function testSelectByTwoFields()
+    {
+        $select = $this->builder->select('select');
+        $select
+            ->addField('*')
+            ->addWhere('field1', 'coucou')
+            ->addWhere('field3', 'Test')
+            ->execute();
+        $array = $select->fetchAll();
+        $this->assertCount(1, $array);
+        $this->assertEquals(3, $array[0]['id']);
+    }
 }

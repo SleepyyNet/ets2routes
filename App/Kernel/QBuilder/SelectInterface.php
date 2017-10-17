@@ -22,13 +22,14 @@
 
 namespace App\Kernel\QBuilder;
 
-/**
- * Interface QueryBuilderInterface
- * @package App\Kernel\QBuilder
- */
-interface QueryBuilderInterface
+interface SelectInterface
 {
-    public function __construct(\PDO $pdo);
-    public function insert(string $tableName);
-    public function select(string $tableName);
+    public function __construct(\PDO $pdo, string $tableName);
+    public function addField(string $fieldName, string $table = '', string $as = '');
+    public function setTable(string $tableName);
+    public function addWhere(string $fieldName, string $value, string $table = '');
+    public function execute(): bool;
+    public function error(): \Exception;
+    public function fetch($style = \PDO::FETCH_ASSOC): array;
+    public function fetchAll($style = \PDO::FETCH_ASSOC): array;
 }

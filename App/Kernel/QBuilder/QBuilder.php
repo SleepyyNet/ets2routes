@@ -38,4 +38,9 @@ class QBuilder implements QueryBuilderInterface
     {
         return new Insert($this->pdo, $tableName);
     }
+
+    public function select(string $tableName)
+    {
+        return new Select($this->pdo, $tableName);
+    }
 }
