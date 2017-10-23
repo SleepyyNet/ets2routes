@@ -55,7 +55,13 @@ class QueryBuilderTest extends TestCase
     public function testInsert()
     {
         $insert = $this->builder->insert('user');
-        $insert->addField('login', 'Test')->addField('password', 'test');
+        $insert
+            ->addField('login', 'Test')
+            ->addField('password', hash('sha256', 'test'))
+            ->addField('user_group', 1)
+            ->addField('mail', 'test@test.com')
+            ->addField('register_date', '2017-10-23 11:05:56')
+            ->addField('last_login', '2017-10-23 11:06:34');
         $this->assertTrue($insert->execute());
     }
 
