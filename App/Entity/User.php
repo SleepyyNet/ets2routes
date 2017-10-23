@@ -152,7 +152,7 @@ class User
      * @param string $validationCode
      * @return User
      */
-    public function setValidationCode(string $validationCode)
+    public function setValidationCode($validationCode)
     {
         $this->validationCode = $validationCode;
 

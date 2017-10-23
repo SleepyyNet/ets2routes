@@ -30,6 +30,6 @@ interface SelectInterface
     public function addWhere(string $fieldName, string $value, string $table = '');
     public function execute(): bool;
     public function error(): \Exception;
-    public function fetch($style = \PDO::FETCH_ASSOC): array;
+    public function fetch($style = \PDO::FETCH_ASSOC);
     public function fetchAll($style = \PDO::FETCH_ASSOC): array;
 }

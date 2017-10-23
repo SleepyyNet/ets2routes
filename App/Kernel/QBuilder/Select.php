@@ -194,9 +194,9 @@ class Select implements SelectInterface
     /**
      * Fetches the next row
      * @param int $style
-     * @return array
+     * @return array|bool
      */
-    public function fetch($style = \PDO::FETCH_ASSOC): array
+    public function fetch($style = \PDO::FETCH_ASSOC)
     {
         return $this->statement->fetch($style);
     }
