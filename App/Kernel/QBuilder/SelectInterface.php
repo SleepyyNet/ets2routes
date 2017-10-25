@@ -27,7 +27,7 @@ interface SelectInterface
     public function __construct(\PDO $pdo, string $tableName);
     public function addField(string $fieldName, string $table = '', string $as = '');
     public function setTable(string $tableName);
-    public function addWhere(string $fieldName, string $value, string $table = '');
+    public function addWhere(string $fieldName, $value, string $table = '');
     public function execute(): bool;
     public function error(): \Exception;
     public function fetch($style = \PDO::FETCH_ASSOC);

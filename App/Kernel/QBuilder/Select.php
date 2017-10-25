@@ -83,7 +83,7 @@ class Select implements SelectInterface
      * @param string $table
      * @return Select
      */
-    public function addWhere(string $fieldName, string $value, string $table = ''): self
+    public function addWhere(string $fieldName, $value, string $table = ''): self
     {
         $this->clauses[$fieldName]['value'] = $value;
 
@@ -163,17 +163,17 @@ class Select implements SelectInterface
          */
         if (!empty($this->clauses)) {
             foreach ($this->clauses as $name => $data) {
-                if (!empty($data['value'])) {
-                    if (!empty($data['table'])) {
-                        $where[] = sprintf('`%s`.`%s` = ?', $data['table'], $name);
-                    } else {
-                        $where[] = sprintf('`%s` = ?', $name);
-                    }
+               // if (!empty($data['value'])) {
+                if (!empty($data['table'])) {
+                    $where[] = sprintf('`%s`.`%s` = ?', $data['table'], $name);
+                } else {
+                    $where[] = sprintf('`%s` = ?', $name);
                 }
+                //}
 
-                if (!empty($data['value'])) {
+                //if (!empty($data['value'])) {
                     $this->values[] = $data['value'];
-                }
+                //}
             }
         }
 

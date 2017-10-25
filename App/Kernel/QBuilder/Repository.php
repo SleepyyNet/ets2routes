@@ -55,9 +55,7 @@ class Repository
      */
     public function find(int $id)
     {
-        foreach ($this->json[$this->name]['entity'] as $property => $field) {
-            $this->select->addField($field['name']);
-        }
+        $this->addedAllFields();
 
         $this->select
             ->addWhere('id', $id)
@@ -77,8 +75,57 @@ class Repository
      */
     public function findAll()
     {
-        foreach ($this->json[$this->name]['entity'] as $property => $field) {
-            $this->select->addField($field['name']);
+        $this->addedAllFields();
+
+        $this->select->execute();
+        $result = $this->select->fetchAll();
+        $array = [];
+
+        if (!empty($result)) {
+            foreach ($result as $item) {
+                $array[] = $this->arrayToEntity($item, new $this->class());
+            }
+
+            return $array;
+        }
+
+        return false;
+    }
+
+    /**
+     * Find one row bt selected fields
+     * @param array $data
+     * @return bool|object
+     */
+    public function findOneBy(array $data)
+    {
+        $this->addedAllFields();
+
+        foreach ($data as $field => $value) {
+            $this->select->addWhere($field, $value);
+        }
+
+        $this->select->execute();
+        $result = $this->select->fetch();
+
+        if (!empty($result)) {
+            return $this->arrayToEntity($result, new $this->class());
+        }
+
+        return false;
+    }
+
+    /**
+     * Find by selected fields
+     * @param array $data
+     * @return array|bool
+     */
+    public function findBy(array $data)
+    {
+        $this->addedAllFields();
+
+        foreach ($data as $field => $value) {
+            $this->select->addWhere($field, $value);
         }
 
         $this->select->execute();
@@ -96,12 +143,10 @@ class Repository
         return false;
     }
 
-    public function findOne()
+    public function __call($name, $arguments)
     {
-    }
-
-    public function findBy()
-    {
+        if (substr($name, 0, 9) == 'findOneBy') {
+        }
     }
 
     /**
@@ -118,5 +163,15 @@ class Repository
         }
 
         return $entity;
+    }
+
+    /**
+     * Add all fields
+     */
+    private function addedAllFields()
+    {
+        foreach ($this->json[$this->name]['entity'] as $property => $field) {
+            $this->select->addField($field['name']);
+        }
     }
 }

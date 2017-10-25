@@ -63,4 +63,41 @@ class RepositoryTest extends TestCase
             $this->assertInstanceOf(User::class, $user);
         }
     }
+
+    public function testFindOneRegisterDateAndValidate()
+    {
+        $array = ['register_date' => '2017-10-23', 'validate' => 0];
+        $user = $this->repos->findOneBy($array);
+
+        $this->assertInstanceOf(User::class, $user);
+        $this->assertEquals('2', $user->getId());
+        $this->assertEquals('0', $user->getValidate());
+        $this->assertEquals('2', $user->getUserGroup());
+        $this->assertEquals('test2@test.com', $user->getMail());
+    }
+
+    public function testNotFindOne()
+    {
+        $array = ['register_date' => '2017-10-20', 'validate' => 0];
+        $this->assertFalse($this->repos->findOneBy($array));
+    }
+
+    public function testFindByUserGroupAndValidateOneRow()
+    {
+        $array = ['user_group' => 1, 'validate' => 0];
+        $users = $this->repos->findBy($array);
+        $this->assertCount(1, $users);
+
+        $this->assertInstanceOf(User::class, $users[0]);
+        $this->assertEquals(3, $users[0]->getId());
+        $this->assertEquals(1, $users[0]->getUserGroup());
+        $this->assertEquals(null, $users[0]->getValidationCode());
+    }
+
+    public function testNotFindBy()
+    {
+        $array = ['user_group' => 0];
+        $users = $this->repos->findBy($array);
+        $this->assertFalse($users);
+    }
 }
