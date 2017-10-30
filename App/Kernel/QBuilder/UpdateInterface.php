@@ -19,45 +19,15 @@
  *  whether in an action of contract, tort or otherwise, arising from, out of or in
  *  connection with the software or the use or other dealings in the Software.
  */
+
 namespace App\Kernel\QBuilder;
 
-class QBuilder implements QueryBuilderInterface
+interface UpdateInterface
 {
-
-    /**
-     * @var \PDO
-     */
-    private $pdo;
-
-    public function __construct(\PDO $pdo)
-    {
-        $this->pdo = $pdo;
-    }
-
-    /**
-     * @param string $tableName
-     * @return InsertInterface
-     */
-    public function insert(string $tableName): InsertInterface
-    {
-        return new Insert($this->pdo, $tableName);
-    }
-
-    /**
-     * @param string $tableName
-     * @return SelectInterface
-     */
-    public function select(string $tableName): SelectInterface
-    {
-        return new Select($this->pdo, $tableName);
-    }
-
-    /**
-     * @param string $tableName
-     * @return UpdateInterface
-     */
-    public function update(string $tableName): UpdateInterface
-    {
-        return new Update($this->pdo, $tableName);
-    }
+    public function __construct(\PDO $pdo, string $tableName);
+    public function addField(string $fieldName, $value);
+    public function addWhere(string $fieldName, $value);
+    public function execute(): bool;
+    public function error(): \Exception;
+    public function debugQuery(): string;
 }
