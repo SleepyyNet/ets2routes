@@ -26,6 +26,7 @@ use App\Kernel\CheckForm\CheckForm;
 use App\Kernel\Controller;
 use App\Entity\User;
 use App\Kernel\Mailer\Mailer;
+use App\Kernel\QBuilder\Repository;
 use App\Kernel\SuperGlobals\SuperGlobals;
 
 class UserController extends Controller
@@ -102,5 +103,37 @@ class UserController extends Controller
     public function tosAction()
     {
         return $this->renderer->render('@App/User/tos.html.twig');
+    }
+
+    /**
+     * Validation code
+     * @param $code
+     * @return \GuzzleHttp\Psr7\Response
+     */
+    public function validationAction($code)
+    {
+        $globals = $this->container->get(SuperGlobals::class);
+        $repos = $this->entityManager->getRepository(User::class);
+
+        if (!is_null($code)) {
+            $user = $repos->findOneBy(['validation_code' => $code]);
+
+            if ($user instanceof User) {
+                $user
+                    ->setValidationCode('')
+                    ->setValidate(true);
+                $this->entityManager->execute($user);
+
+                $globals->session()->setFlashMessage(
+                    'success', $this->translation->translate('flash.validation.success')
+                );
+            } else {
+                $globals->session()->setFlashMessage(
+                    'error', $this->translation->translate('flash.validation.error')
+                );
+            }
+
+            return $this->redirectToRoute('index');
+        }
     }
 }

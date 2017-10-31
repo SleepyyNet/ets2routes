@@ -14,6 +14,10 @@
     "register": {
       "success": "Votre inscription a bien été effectuée, veuillez consulter votre adresse e-mail afin de procéder à la validation de votre compte.",
       "error": "L'inscription n'a pu être faite, merci de réessayer plus tard ou de contacter l'administrateur."
+    },
+    "validation": {
+      "success": "Votre compte a bien été validé, bienvenue à vous",
+      "error": "Code de validation incorrect"
     }
   },
   "check": {

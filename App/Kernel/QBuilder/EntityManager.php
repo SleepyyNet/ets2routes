@@ -38,6 +38,11 @@ class EntityManager
         $this->builder = new QBuilder($pdo);
     }
 
+    /**
+     * Execute the save or update entity in DB
+     * @param $entity
+     * @return bool
+     */
     public function execute($entity)
     {
         $this->definitionFile(get_class($entity));
@@ -53,6 +58,11 @@ class EntityManager
         return $bool;
     }
 
+    /**
+     * Save entity in DB
+     * @param $entity
+     * @return bool
+     */
     public function save($entity)
     {
         $insert = $this->builder->insert($this->def['name']);
@@ -65,10 +75,44 @@ class EntityManager
         return $insert->execute();
     }
 
+    /**
+     * Update entity in DB
+     * @param $entity
+     * @return bool
+     */
     public function update($entity)
     {
+        $update = $this->builder->update($this->def['name']);
+
+        foreach ($this->def['entity'] as $field => $data) {
+            $method = 'get'.ucfirst($field);
+            $update->addField($data['name'], $entity->$method());
+        }
+
+        return $update->execute();
     }
 
+    /**
+     * @param string $entity
+     * @return Repository
+     */
+    public function getRepository(string $entity)
+    {
+        $pos = strrpos($entity, '\\');
+        $class = substr($entity, $pos+1);
+
+        if (file_exists('App/Repositories/'.$class.'.php')) {
+            $repository = 'App\\Repositories\\'.$class;
+        } else {
+            $repository = 'App\\Kernel\\Qbuilder\\Repository';
+        }
+
+        return new $repository($this->builder, $entity);
+    }
+
+    /**
+     * @param string $className
+     */
     private function definitionFile(string $className)
     {
         $file = basename($className);
