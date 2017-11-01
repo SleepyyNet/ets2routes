@@ -113,27 +113,57 @@ class UserController extends Controller
     public function validationAction($code)
     {
         $globals = $this->container->get(SuperGlobals::class);
-        $repos = $this->entityManager->getRepository(User::class);
 
         if (!is_null($code)) {
-            $user = $repos->findOneBy(['validation_code' => $code]);
-
-            if ($user instanceof User) {
-                $user
-                    ->setValidationCode('')
-                    ->setValidate(true);
-                $this->entityManager->execute($user);
-
-                $globals->session()->setFlashMessage(
-                    'success', $this->translation->translate('flash.validation.success')
-                );
-            } else {
-                $globals->session()->setFlashMessage(
-                    'error', $this->translation->translate('flash.validation.error')
-                );
-            }
-
+            $this->registerValidation($code);
             return $this->redirectToRoute('index');
         }
+
+        if ($globals->post()->isSubmit()) {
+            $check = new CheckForm($this->container);
+
+            if ($check->check('App/Config/Forms/user_validation.json')) {
+                if ($this->registerValidation($globals->post()->get('code'))) {
+                    return $this->redirectToRoute('index');
+                }
+            }
+
+            return $this->renderer->render('@App/User/validation.html.twig');
+        }
+
+        return $this->renderer->render('@App/User/validation.html.twig');
+    }
+
+    /**
+     * Validation register with code
+     * @param $code
+     * @return bool
+     */
+    private function registerValidation($code): bool
+    {
+        $bool = false;
+        $globals = $this->container->get(SuperGlobals::class);
+        $repos = $this->entityManager->getRepository(User::class);
+
+        $user = $repos->findOneBy(['validation_code' => $code]);
+
+        if ($user instanceof User) {
+            $user
+                ->setValidationCode('')
+                ->setValidate(true);
+            $bool = $this->entityManager->execute($user);
+
+            $globals->session()->setFlashMessage(
+                'success',
+                $this->translation->translate('flash.validation.success')
+            );
+        } else {
+            $globals->session()->setFlashMessage(
+                'error',
+                $this->translation->translate('flash.validation.error')
+            );
+        }
+
+        return $bool;
     }
 }

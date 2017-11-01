@@ -7,7 +7,13 @@
       "check": "J'accepte les ",
       "tos": "Conditions Générales d'Utilisation",
       "register": "S'inscrire",
-      "msg": "En vous inscrivant, vous vous engagez à respecter les règles édictées dans les CGU. Toute transgression pourra entraîner des sanctions."
+      "msg": "En vous inscrivant, vous vous engagez à respecter les règles édictées dans les CGU. Toute transgression pourra entraîner des sanctions.",
+      "validation": "Afin de procéder à la validation de votre compte, merci d'inscrire le code reçu par e-mail.",
+      "code": "Code de validation",
+      "validate": "Valider",
+      "h2": {
+        "validation": "Validation d'inscription"
+      }
     }
   },
   "flash": {
@@ -16,7 +22,7 @@
       "error": "L'inscription n'a pu être faite, merci de réessayer plus tard ou de contacter l'administrateur."
     },
     "validation": {
-      "success": "Votre compte a bien été validé, bienvenue à vous",
+      "success": "Votre compte a bien été validé, vous pouvez maintenant vous connecter.",
       "error": "Code de validation incorrect"
     }
   },
