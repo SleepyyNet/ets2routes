@@ -1,0 +1,9 @@
+{
+  "login": {
+    "maxlength": 255
+  },
+  "password": {
+    "maxlength": 50,
+    "minlength": 6
+  }
+}

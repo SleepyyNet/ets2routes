@@ -48,10 +48,13 @@ class SessionGlobal
      * Set information in session
      * @param string $key
      * @param $val
+     * @return SessionGlobal
      */
-    public function set(string $key, $val): void
+    public function set(string $key, $val): self
     {
         $_SESSION[$this->siteKey][$key] = $val;
+
+        return $this;
     }
 
     /**
@@ -92,5 +95,17 @@ class SessionGlobal
         }
 
         return '';
+    }
+
+    /**
+     * Delete session key
+     * @param string $key
+     * @return SessionGlobal
+     */
+    public function delete(string $key): self
+    {
+        unset($_SESSION[$this->siteKey][$key]);
+
+        return $this;
     }
 }

@@ -53,6 +53,7 @@ class BaseExtension extends \Twig_Extension
             new \Twig_SimpleFunction('path', [$this, 'getUrl']),
             new \Twig_SimpleFunction('flash', [$this, 'getFlashMessage'], ['is_safe' => ['html']]),
             new \Twig_SimpleFunction('flashType', [$this, 'getFlashType']),
+            new \Twig_SimpleFunction('session', [$this, 'getSession']),
         ];
     }
 
@@ -80,5 +81,10 @@ class BaseExtension extends \Twig_Extension
     public function getFlashType(): string
     {
         return $this->globals->session()->getTypeFlashMessage();
+    }
+
+    public function getSession(string $key)
+    {
+        return $this->globals->session()->get($key);
     }
 }

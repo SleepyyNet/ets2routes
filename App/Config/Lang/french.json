@@ -13,6 +13,12 @@
       "validate": "Valider",
       "h2": {
         "validation": "Validation d'inscription"
+      },
+      "connection": {
+        "msg": "Pour vous connecter, merci de remplir le formulaire suivant. Vous avez la possibilité de demander au site de vous identifier automatiquement, pour cela un cookie sera stocké sur votre ordinateur. Si vous ne le souhaitez pas, merci de ne pas demander d'identification automatiquement",
+        "fields": {
+          "validate": "Se connecter"
+        }
       }
     }
   },
@@ -24,6 +30,10 @@
     "validation": {
       "success": "Votre compte a bien été validé, vous pouvez maintenant vous connecter.",
       "error": "Code de validation incorrect"
+    },
+    "disconnect": "Vous avez bien été déconnecté de votre compte, tout cookie installé a bien été supprimé.",
+    "connection": {
+      "error": "Nom d'utilisateur ou mot de passe invalide."
     }
   },
   "check": {

@@ -135,6 +135,62 @@ class UserController extends Controller
     }
 
     /**
+     * User connection
+     * @return \GuzzleHttp\Psr7\Response
+     */
+    public function loginAction()
+    {
+        $globals = $this->container->get(SuperGlobals::class);
+
+        if ( $globals->post()->isSubmit() ) {
+            $check = new CheckForm($this->container);
+
+            if ($check->check('App/Config/Forms/user_login.json')) {
+                $repos = $this->entityManager->getRepository(User::class);
+                $user = $repos->findOneBy([
+                    'login' => $globals->post()->get('login'),
+                    'password' => hash('sha256', $globals->post()->get('password'))
+                ]);
+
+                if ( $user instanceof User ) {
+                    $user->setLastLogin( date('Y-m-d H:i:s') );
+                    $this->entityManager->execute($user);
+
+                    $globals->session()
+                        ->set('id', $user->getId())
+                        ->set('login', $user->getLogin());
+
+                    return $this->redirectToRoute('index');
+                }
+
+                $globals->session()
+                    ->setFlashMessage('error', $this->translation->translate('flash.connection.error'));
+                return $this->renderer->render('@App/User/login.html.twig', [
+                    'login' => $globals->post()->get('login')
+                ]);
+            }
+        }
+
+        return $this->renderer->render('@App/User/login.html.twig');
+    }
+
+    /**
+     * Disconnect user
+     * @return \GuzzleHttp\Psr7\Response
+     */
+    public function disconnectAction()
+    {
+        $globals = $this->container->get(SuperGlobals::class);
+        $globals
+            ->session()
+            ->delete('id')
+            ->delete('login')
+            ->setFlashMessage('success', $this->translation->translate('flash.disconnect'));
+
+        return $this->redirectToRoute('index');
+    }
+
+    /**
      * Validation register with code
      * @param $code
      * @return bool

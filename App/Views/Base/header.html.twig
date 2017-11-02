@@ -3,19 +3,5 @@
         <img src="{{ img('logo.png') }}" width="50%">
     </div>
 
-    <div class="col-md-4 col-md-offset-6">
-        <nav class="navbar navbar-default">
-            <div class="collapse navbar-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="{{ path('index') }}">Accueil</a></li>
-                    <li><a href="">Contact</a></li>
-                    <li><a href="">FAQ</a></li>
-                    <li><a href="">Forum</a></li>
-                    <li><a href="{{ path('user_register') }}">Inscription</a></li>
-                    <li><a href="">Connexion</a></li>
-                </ul>
-            </div>
-        </nav>
-    </div>
-
+    {% include '@App/Base/navbar.html.twig' %}
 </header>

@@ -20,5 +20,13 @@
     "defaults": {
       "code": null
     }
+  },
+  "user_login": {
+    "path": "/user/login",
+    "controller": "App:User:login"
+  },
+  "user_disconnect": {
+    "path": "/user/disconnect",
+    "controller": "App:User:disconnect"
   }
 }
