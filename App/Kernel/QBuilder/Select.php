@@ -38,6 +38,7 @@ class Select implements SelectInterface
     private $fields;
     private $clauses;
     private $values;
+    private $joins;
 
     /**
      * Select constructor.
@@ -59,7 +60,7 @@ class Select implements SelectInterface
      */
     public function addField(string $fieldName, string $table = '', string $as = ''): self
     {
-        $this->fields[$fieldName] = ['table' => $table, 'as' => $as];
+        $this->fields[] = ['field' => $fieldName, 'table' => $table, 'as' => $as];
 
         return $this;
     }
@@ -85,11 +86,40 @@ class Select implements SelectInterface
      */
     public function addWhere(string $fieldName, $value, string $table = ''): self
     {
-        $this->clauses[$fieldName]['value'] = $value;
+        //$this->clauses[$fieldName]['value'] = $value;
+        //$this->clauses[] = ['field' => $fieldName, 'value' => $value];
+        $clause = ['field' => $fieldName, 'value' => $value];
 
         if (!empty($table)) {
-            $this->clauses[$fieldName]['table'] = $table;
+            //$this->clauses[$fieldName]['table'] = $table;
+            $clause['table'] = $table;
         }
+
+        $this->clauses[] = $clause;
+
+        return $this;
+    }
+
+    /**
+     * Add a join
+     * @param string $type
+     * @param string $tableName
+     * @param string $field1
+     * @param string $tableName2
+     * @param string $field2
+     * @return Select
+     */
+    public function addJoin(string $type, string $tableName, string $field1, string $tableName2, string $field2): self
+    {
+        $this->joins[] = sprintf(
+            '%s JOIN `%s` ON `%s`.`%s` = `%s`.`%s`',
+            $type,
+            $tableName,
+            $tableName,
+            $field1,
+            $tableName2,
+            $field2
+        );
 
         return $this;
     }
@@ -110,7 +140,7 @@ class Select implements SelectInterface
      */
     public function error(): \Exception
     {
-        throw new \Exception($this->pdo->errorInfo());
+        throw new \Exception($this->statement->errorInfo()[2]);
     }
 
     /**
@@ -131,21 +161,21 @@ class Select implements SelectInterface
         $fields = '';
         $where = [];
 
-        foreach ($this->fields as $name => $data) {
+        foreach ($this->fields as $data) {
             /*
              * Fields construction list
              */
             if (!empty($data['table'])) {
-                if ($name === '*') {
-                    $fields .= $name;
+                if ($data['field'] === '*') {
+                    $fields .= $data['field'];
                 } else {
-                    $fields .= sprintf('`%s`.`%s`', $data['table'], $name);
+                    $fields .= sprintf('`%s`.`%s`', $data['table'], $data['field']);
                 }
             } else {
-                if ($name === '*') {
-                    $fields .= $name;
+                if ($data['field'] === '*') {
+                    $fields .= $data['field'];
                 } else {
-                    $fields .= sprintf('`%s`', $name);
+                    $fields .= sprintf('`%s`', $data['field']);
                 }
             }
 
@@ -162,24 +192,25 @@ class Select implements SelectInterface
          * Where construct array
          */
         if (!empty($this->clauses)) {
-            foreach ($this->clauses as $name => $data) {
+            foreach ($this->clauses as $data) {
                // if (!empty($data['value'])) {
                 if (!empty($data['table'])) {
-                    $where[] = sprintf('`%s`.`%s` = ?', $data['table'], $name);
+                    $where[] = sprintf('`%s`.`%s` = ?', $data['table'], $data['field']);
                 } else {
-                    $where[] = sprintf('`%s` = ?', $name);
+                    $where[] = sprintf('`%s` = ?', $data['field']);
                 }
-                //}
 
-                //if (!empty($data['value'])) {
-                    $this->values[] = $data['value'];
-                //}
+                $this->values[] = $data['value'];
             }
         }
 
         $fields = substr($fields, 0, -2);
 
         $sql = sprintf('SELECT %s FROM `%s`', $fields, $this->tableName);
+
+        if (!empty($this->joins)) {
+            $sql .= implode(' ', $this->joins);
+        }
 
         if (!empty($where)) {
             $clause = implode(' AND ', $where);

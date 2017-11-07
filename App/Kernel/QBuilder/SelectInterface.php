@@ -24,12 +24,78 @@ namespace App\Kernel\QBuilder;
 
 interface SelectInterface
 {
+    /**
+     * Select constructor.
+     * @param \PDO $pdo
+     * @param string $tableName
+     */
     public function __construct(\PDO $pdo, string $tableName);
+
+    /**
+     * Add field in fields list
+     * @param string $fieldName
+     * @param string $table
+     * @param string $as
+     * @return Select
+    */
     public function addField(string $fieldName, string $table = '', string $as = '');
+
+    /**
+     * Set table name
+     * @param string $tableName
+     * @return Select
+     */
     public function setTable(string $tableName);
+
+    /**
+     * Add a WHERE clause
+     * @param string $fieldName
+     * @param string $value
+     * @param string $table
+     * @return Select
+     */
     public function addWhere(string $fieldName, $value, string $table = '');
+
+    /**
+     * Add a join
+     * @param string $type
+     * @param string $tableName
+     * @param string $field1
+     * @param string $tableName2
+     * @param string $field2
+     * @return Select
+     */
+    public function addJoin(string $type, string $tableName, string $field1, string $tableName2, string $field2);
+
+    /**
+     * Execute query
+     * @return bool
+     */
     public function execute(): bool;
+
+    /**
+     * @return \Exception
+     * @throws \Exception
+     */
     public function error(): \Exception;
+
+    /**
+     * Prepared query string
+     * @return string
+     */
+    public function debugQuery();
+
+    /**
+     * Fetches the next row
+     * @param int $style
+     * @return array|bool
+     */
     public function fetch($style = \PDO::FETCH_ASSOC);
+
+    /**
+     * Returns an array containing all of the rows
+     * @param int $style
+     * @return array
+     */
     public function fetchAll($style = \PDO::FETCH_ASSOC): array;
 }
