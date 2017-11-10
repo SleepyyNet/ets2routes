@@ -143,11 +143,11 @@ class Repository
         return false;
     }
 
-    public function __call($name, $arguments)
+    /*public function __call($name, $arguments)
     {
         if (substr($name, 0, 9) == 'findOneBy') {
         }
-    }
+    }*/
 
     /**
      * Convert input array to entity
@@ -159,7 +159,7 @@ class Repository
     {
         foreach ($this->json[$this->name]['entity'] as $property => $field) {
             $method = 'set'.ucfirst($property);
-            $entity->$method($result[$field['name']]);
+            $entity->$method($result[$this->name.'_'.$field['name']]);
         }
 
         return $entity;
@@ -171,7 +171,7 @@ class Repository
     private function addedAllFields()
     {
         foreach ($this->json[$this->name]['entity'] as $property => $field) {
-            $this->select->addField($field['name']);
+            $this->select->addField($field['name'], $this->name, $this->name.'_'.$field['name']);
         }
     }
 }
