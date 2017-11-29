@@ -22,20 +22,70 @@
 
 namespace App\Entity;
 
+use DI\Annotation\Inject;
+use Doctrine\ORM\Mapping as ORM;
+
 /**
  * User entity
  * @package App\Entity
+ * @ORM\Entity
+ * @ORM\Table(name="user",
+ *     indexes={
+ *      @ORM\Index(name="ikey_user_group", columns={"user_group"})
+ *      },
+ *     uniqueConstraints={
+ *      @ORM\UniqueConstraint(name="ukey_login", columns={"login"}),
+ *      @ORM\UniqueConstraint(name="ukey_validation_code", columns={"validation_code"})
+ *     }
+ * )
  */
 class User
 {
+    /**
+     * @ORM\Id
+     * @ORM\Column(type="integer", options={"unsigned"=true})
+     * @ORM\GeneratedValue
+     */
     private $id;
+
+    /**
+     * @ORM\Column(type="integer", options={"unsigned"=true}, name="user_group")
+     */
     private $userGroup;
+
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
     private $login;
+
+    /**
+     * @ORM\Column(type="string", length=64)
+     */
     private $password;
+
+    /**
+     * @ORM\Column(type="string", length=100)
+     */
     private $mail;
+
+    /**
+     * @ORM\Column(type="string", length=32, nullable=true, name="validation_code")
+     */
     private $validationCode;
+
+    /**
+     * @ORM\Column(type="date", name="register_date")
+     */
     private $registerDate;
+
+    /**
+     * @ORM\Column(type="datetime", name="last_login")
+     */
     private $lastLogin;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=false, options={"default"=0})
+     */
     private $validate;
 
     public function __construct()
@@ -116,7 +166,7 @@ class User
      */
     public function setPassword(string $password)
     {
-        $this->password = $password;
+        $this->password = hash('sha256', $password);
 
         return $this;
     }
@@ -164,16 +214,16 @@ class User
      */
     public function getRegisterDate()
     {
-        return $this->registerDate->format('Y-m-d');
+        return $this->registerDate;
     }
 
     /**
-     * @param string $registerDate
+     * @param date $registerDate
      * @return User
      */
-    public function setRegisterDate(string $registerDate)
+    public function setRegisterDate($registerDate)
     {
-        $this->registerDate = date_create($registerDate);
+        $this->registerDate = $registerDate;
 
         return $this;
     }
@@ -183,16 +233,16 @@ class User
      */
     public function getLastLogin()
     {
-        return $this->lastLogin->format('Y-m-d H:i:s');
+        return $this->lastLogin;
     }
 
     /**
-     * @param string $lastLogin
+     * @param date $lastLogin
      * @return User
      */
-    public function setLastLogin(string $lastLogin)
+    public function setLastLogin($lastLogin)
     {
-        $this->lastLogin = date_create($lastLogin);
+        $this->lastLogin = $lastLogin;
 
         return $this;
     }
@@ -211,7 +261,7 @@ class User
      */
     public function setValidate(bool $validate)
     {
-        $this->validate = (int)$validate;
+        $this->validate = $validate;
 
         return $this;
     }
