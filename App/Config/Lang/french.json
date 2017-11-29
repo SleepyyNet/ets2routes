@@ -1,4 +1,7 @@
 {
+  "general": {
+    "dateformat": "d/m/Y H:i"
+  },
   "form": {
     "user": {
       "login": "Nom d'utilisateur",
@@ -44,5 +47,13 @@
   },
   "register": {
     "mail": "Inscription sur ETS2Routes"
+  },
+  "modules": {
+    "news": {
+      "by": "Par",
+      "the": "le",
+      "cat": "Catégorie : ",
+      "unknown": "inconnu"
+    }
   }
 }

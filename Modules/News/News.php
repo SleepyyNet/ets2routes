@@ -1,4 +1,9 @@
 <?php
+
+namespace Modules\News;
+
+use Modules\News\Controller\NewsController;
+
 /**
  *  Copyright Christophe Daloz - De Los Rios, 2017
  *
@@ -20,20 +25,25 @@
  *  connection with the software or the use or other dealings in the Software.
  */
 
-namespace App\Controller;
-
-use App\Kernel\Controller;
-use DI\Container;
-use GuzzleHttp\Psr7\Response;
-use Modules\News\Controller\NewsController;
-
-class DefaultController extends Controller
+/**
+ * Class News
+ * @package Modules\News
+ * @author Christophe Daloz - De Los Rios <christophedlr@gmail.com>
+ * @version 1.0
+ */
+class News
 {
-    public function indexAction()
+    /**
+     * Return classname of controller
+     * @param string $name
+     * @return string
+     */
+    public function class(string $name): string
     {
-        $class = $this->getModule('News')->class('news');
-        $news = new $class($this->container);
-
-        return $this->renderer->render('@App/index.html.twig', ['news' => $news->integratedNews()]);
+        switch ($name) {
+            case 'news':
+                return NewsController::class;
+                break;
+        }
     }
 }

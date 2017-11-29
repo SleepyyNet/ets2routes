@@ -20,20 +20,44 @@
  *  connection with the software or the use or other dealings in the Software.
  */
 
-namespace App\Controller;
+namespace Modules\News\Controller;
 
+use App\Entity\News;
 use App\Kernel\Controller;
+use App\Kernel\QBuilder\QBuilder;
 use DI\Container;
 use GuzzleHttp\Psr7\Response;
-use Modules\News\Controller\NewsController;
 
-class DefaultController extends Controller
+class NewsController extends Controller
 {
-    public function indexAction()
+    public function __construct(Container $container)
     {
-        $class = $this->getModule('News')->class('news');
-        $news = new $class($this->container);
+        parent::__construct($container);
+        $this->renderer->addPath('Modules/News/Views', 'News');
+    }
 
-        return $this->renderer->render('@App/index.html.twig', ['news' => $news->integratedNews()]);
+    public function integratedNews()
+    {
+        /*$select = $this->container->get(QBuilder::class)->select('news');
+        $select
+            ->addField('id', 'news')
+            ->addField('post_date', 'news')
+            ->addField('change_date', 'news')
+            ->addField('slug', 'news')
+            ->addField('title', 'news')
+            ->addField('text', 'news')
+            ->addField('name', 'news_cat', 'category')
+            ->addField('login', 'user')
+            ->addJoin('INNER', 'news_cat', 'id', 'news', 'cat')
+            ->addJoin('INNER', 'user', 'id', 'news', 'author')
+            ->execute();
+        $results = $select->fetchAll();*/
+
+        $repos = $this->getManager()->getRepository(News::class);
+        $results = $repos->findAll();
+
+        //var_dump($results[1]->getAuthor()->getLogin()); exit;
+
+        return $this->renderer->render('@News/Integrated/news.html.twig', ['newsList' => $results], 200, true);
     }
 }
