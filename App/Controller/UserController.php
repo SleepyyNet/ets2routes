@@ -60,7 +60,10 @@ class UserController extends Controller
                 ->setUserGroup(1)
                 ->setValidationCode($this->generateCode(32));
 
-            if ($this->entityManager->execute($user)) {
+            $this->getManager()->persist($user);
+            $this->getManager()->flush();
+
+            if ($user->getId() > 0) {
                 $mailer = new Mailer();
                 $mailer->addCustomHeader('Reply-To', $this->parameters['mail']['sender']);
                 $mailer->addAddress($user->getMail());
@@ -142,19 +145,20 @@ class UserController extends Controller
     {
         $globals = $this->container->get(SuperGlobals::class);
 
-        if ( $globals->post()->isSubmit() ) {
+        if ($globals->post()->isSubmit()) {
             $check = new CheckForm($this->container);
 
             if ($check->check('App/Config/Forms/user_login.json')) {
-                $repos = $this->entityManager->getRepository(User::class);
+                $repos = $this->getManager()->getRepository(User::class);
                 $user = $repos->findOneBy([
                     'login' => $globals->post()->get('login'),
                     'password' => hash('sha256', $globals->post()->get('password'))
                 ]);
 
-                if ( $user instanceof User ) {
-                    $user->setLastLogin( date('Y-m-d H:i:s') );
-                    $this->entityManager->execute($user);
+                if ($user instanceof User) {
+                    $user->setLastLogin(date_create());
+                    $this->getManager()->persist($user);
+                    $this->getManager()->flush();
 
                     $globals->session()
                         ->set('id', $user->getId())
@@ -199,27 +203,28 @@ class UserController extends Controller
     {
         $bool = false;
         $globals = $this->container->get(SuperGlobals::class);
-        $repos = $this->entityManager->getRepository(User::class);
+        $repos = $this->getManager()->getRepository(User::class);
 
-        $user = $repos->findOneBy(['validation_code' => $code]);
+        $user = $repos->findOneBy(['validationCode' => $code]);
 
         if ($user instanceof User) {
             $user
-                ->setValidationCode('')
+                ->setValidationCode(null)
                 ->setValidate(true);
-            $bool = $this->entityManager->execute($user);
+            $this->getManager()->persist($user);
+            $this->getManager()->flush();
 
             $globals->session()->setFlashMessage(
                 'success',
                 $this->translation->translate('flash.validation.success')
             );
-        } else {
-            $globals->session()->setFlashMessage(
-                'error',
-                $this->translation->translate('flash.validation.error')
-            );
+
+            return true;
         }
 
-        return $bool;
+        $globals->session()->setFlashMessage(
+            'error',
+            $this->translation->translate('flash.validation.error')
+        );
     }
 }
