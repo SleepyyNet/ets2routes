@@ -23,11 +23,12 @@
 namespace App\Kernel;
 
 use App\Kernel\Lang\LangManager;
-use App\Kernel\QBuilder\EntityManager;
 use App\Kernel\Renderer\TwigRenderer;
 use App\Kernel\Router\Router;
 use DI\Container;
+use Doctrine\ORM\EntityRepository;
 use GuzzleHttp\Psr7\Response;
+use Doctrine\ORM\EntityManager;
 
 class Controller
 {
@@ -63,8 +64,12 @@ class Controller
 
     public function __construct(Container $container)
     {
+        global $entityManager;
+
+        require_once 'config/bootstrap.php';
+
         $this->container = $container;
-        $this->entityManager = $container->get(EntityManager::class);
+        $this->entityManager = $entityManager;
 
         $this->translation = $container->get(LangManager::class);
         $this->router = $container->get(RouterFactory::class)::create('App/Config/routes.json');
@@ -107,6 +112,28 @@ class Controller
     public function generateCode(int $length)
     {
         return bin2hex(random_bytes(($length/2)));
+    }
+
+    public function getModule(string $name)
+    {
+        return $this->container->get($name);
+    }
+
+    /**
+     * @return EntityManager
+     */
+    public function getManager(): EntityManager
+    {
+        return $this->entityManager;
+    }
+
+    /**
+     * @param string $entityName
+     * @return EntityRepository
+     */
+    public function getRepository(string $entityName): EntityRepository
+    {
+        return $this->entityManager->getRepository($entityName);
     }
 
     /**
