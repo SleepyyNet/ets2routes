@@ -22,6 +22,12 @@
 
 namespace App\Kernel\Lang;
 
+/**
+ * Class LangManager
+ * @package App\Kernel\Lang
+ * @author Christophe Daloz - De Los Rios <christophedlr@gmail.com>
+ * @version 1.0
+ */
 class LangManager
 {
     private $translation;
