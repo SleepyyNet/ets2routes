@@ -52,7 +52,7 @@ class TwigRenderer implements RendererInterface
         $this->container = $container;
 
         $this->loader = new \Twig_Loader_Filesystem();
-        $this->twig = new \Twig_Environment($this->loader);
+        $this->twig = new \Twig_Environment($this->loader, array('debug' => true));
     }
 
     /**
