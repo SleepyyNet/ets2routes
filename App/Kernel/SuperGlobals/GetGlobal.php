@@ -23,32 +23,76 @@
 namespace App\Kernel\SuperGlobals;
 
 /**
- * Class SuperGlobals
+ * Manage $_GET SuperGlobal
  * @package App\Kernel\SuperGlobals
  */
-class SuperGlobals
+class GetGlobal
 {
     /**
-     * @return PostGlobal
+     * GET $_GET key
+     * @param mixed $key
+     * @return mixed|null
      */
-    public function post()
+    public function get($key)
     {
-        return new PostGlobal();
+        if (isset($_GET[$key])) {
+            return $_GET[$key];
+        }
+
+        return null;
     }
 
     /**
-     * @return SessionGlobal
+     * @param $key
+     * @return bool
      */
-    public function session()
+    public function isNull($key): bool
     {
-        return new SessionGlobal();
+        return is_null($_GET[$key]);
     }
 
     /**
-     * @return GetGlobal
+     * @param $key
+     * @return bool
      */
-    public function get()
+    public function isInt($key): bool
     {
-        return new GetGlobal();
+        return is_int($_GET[$key]);
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function isBool($key): bool
+    {
+        return is_bool($_GET[$key]);
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function isString($key): bool
+    {
+        return is_string($_GET[$key]);
+    }
+
+    /**
+ * @param $key
+ * @return bool
+ */
+    public function isNumeric($key): bool
+    {
+        return is_numeric($_GET[$key]);
+    }
+
+    /**
+     * @param $key
+     * @return bool
+     */
+    public function isFloat($key): bool
+    {
+        return is_float($_GET[$key]);
     }
 }
