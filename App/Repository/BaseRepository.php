@@ -1,6 +1,6 @@
 <?php
 /**
- *  Copyright <author>, <year>
+ *  Copyright Christophe Daloz - De Los Rios, 2017
  *
  *  Permission is hereby granted, free of charge, to any person obtaining a copy
  *  of this software and associated documentation files (the “Software”), to deal
@@ -20,18 +20,27 @@
  *  connection with the software or the use or other dealings in the Software.
  */
 
-// bootstrap.php
-require_once "vendor/autoload.php";
+namespace App\Repository;
 
-use Doctrine\ORM\Tools\Setup;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping;
 
-global $entityManager, $dbParams;
+class BaseRepository extends EntityRepository
+{
+    private $driver;
 
-$dbParams = json_decode(file_get_contents('App/Config/parameters.json'), true)['database'];
+    public function __construct(EntityManager $em, Mapping\ClassMetadata $class)
+    {
+        global $dbParams;
 
-$paths = array("App/Entity");
-$isDevMode = true;
+        parent::__construct($em, $class);
+        $this->driver = DriverManager::getConnection($dbParams);
+    }
 
-$config = Setup::createAnnotationMetadataConfiguration($paths, $isDevMode, null, null, false);
-$entityManager = EntityManager::create($dbParams, $config);
+    public function getDriver()
+    {
+        return $this->driver;
+    }
+}
