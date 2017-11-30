@@ -12,10 +12,53 @@
             <div class="panel-body">{{ news.text|nl2br }}</div>
             <div class="panel-footer">
                 {{ tr('modules.news.by') }} <b>{{ news.author.login }}</b>
-                {{ tr('modules.news.the') }} <b>{{ news.post_date|date(tr('general.dateformat')) }}</b>
+                {{ tr('modules.news.the') }} <b>{{ news.postDate|date(tr('general.dateformat')) }}</b>
                 - {{ tr('modules.news.cat') }} <b>{{ news.category.name }}</b>
             </div>
         </div>
     </div>
 </div>
 {% endfor %}
+
+{# Pagination #}
+<div class="row">
+    <div class="col-md-6 col-md-offset-4">
+        <nav aria-label="Page navigiation">
+            <ul class="pagination">
+
+                {# Previous #}
+                {% if page == 1 %}
+                    <li class="disabled">
+                        <a href="{{ path('index') }}?page={{ page }}" aria-label="Previous">
+                {% else %}
+                    <li>
+                        <a href="{{ path('index') }}?page={{ page-1 }}" aria-label="Previous">
+                {% endif %}
+                    <span aria-hidden="true">&laquo;</span></a>
+                </li>
+
+                {# Actual #}
+                {% if page > 1 %}
+                    <li><a href="{{ path('index') }}?page={{ page-1 }}">{{ page-1 }}</a></li>
+                {% endif %}
+
+                <li class="active"><a href="{{ path('index') }}?page={{ page }}">{{ page }}</a></li>
+
+                {% if page < total %}
+                    <li><a href="{{ path('index') }}?page={{ page+1 }}">{{ page+1 }}</a></li>
+                {% endif %}
+
+                {# Next #}
+                {% if page == total %}
+                    <li class="disabled">
+                        <a href="{{ path('index') }}?page={{ page }}" aria-label="Next">
+                {% else %}
+                    <li>
+                    <a href="{{ path('index') }}?page={{ page+1 }}" aria-label="Next">
+                {% endif %}
+                    <span aria-hidden="true">&raquo;</span></a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>

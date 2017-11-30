@@ -24,10 +24,15 @@ namespace Modules\News\Controller;
 
 use App\Entity\News;
 use App\Kernel\Controller;
-use App\Kernel\QBuilder\QBuilder;
+use App\Kernel\SuperGlobals\SuperGlobals;
 use DI\Container;
-use GuzzleHttp\Psr7\Response;
 
+/**
+ * Class NewsController
+ * @package Modules\News\Controller
+ * @author Christophe Daloz - De Los Rios
+ * @version 1.0
+ */
 class NewsController extends Controller
 {
     public function __construct(Container $container)
@@ -36,28 +41,31 @@ class NewsController extends Controller
         $this->renderer->addPath('Modules/News/Views', 'News');
     }
 
+    /**
+     * Integrated news in template
+     * @return string
+     */
     public function integratedNews()
     {
-        /*$select = $this->container->get(QBuilder::class)->select('news');
-        $select
-            ->addField('id', 'news')
-            ->addField('post_date', 'news')
-            ->addField('change_date', 'news')
-            ->addField('slug', 'news')
-            ->addField('title', 'news')
-            ->addField('text', 'news')
-            ->addField('name', 'news_cat', 'category')
-            ->addField('login', 'user')
-            ->addJoin('INNER', 'news_cat', 'id', 'news', 'cat')
-            ->addJoin('INNER', 'user', 'id', 'news', 'author')
-            ->execute();
-        $results = $select->fetchAll();*/
-
+        $get = $this->container->get(SuperGlobals::class)->get();
         $repos = $this->getManager()->getRepository(News::class);
-        $results = $repos->findAll();
 
-        //var_dump($results[1]->getAuthor()->getLogin()); exit;
+        $limitPerPage = $this->container->get('parameters')['modules']['news']['limitPerPage'];
+        $page = (int)$get->get('page');
+        $totalPages = (int)ceil($repos->count()/$limitPerPage);
 
-        return $this->renderer->render('@News/Integrated/news.html.twig', ['newsList' => $results], 200, true);
+        if ($page > 0) {
+            $results = $repos->findBy([], ['postDate' => 'ASC'], $limitPerPage, ( $limitPerPage*($page-1) ));
+        } else {
+            $page = 1;
+            $results = $repos->findBy([], ['postDate' => 'ASC'], $limitPerPage, 0);
+        }
+
+        return $this->renderer->render(
+            '@News/Integrated/news.html.twig',
+            ['newsList' => $results, 'total' => $totalPages, 'page' => $page],
+            200,
+            true
+        );
     }
 }
