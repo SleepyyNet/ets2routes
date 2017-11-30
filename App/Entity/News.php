@@ -30,7 +30,7 @@ use App\Entity\User;
  * Class News
  * @package App\Entity
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="App\Repository\NewsRepository")
  * @ORM\Table(name="news",
  *     indexes={
  *      @ORM\Index(name="ikey_category", columns={"category"}),
