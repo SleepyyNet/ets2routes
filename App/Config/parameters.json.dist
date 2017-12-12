@@ -13,6 +13,18 @@
     "sendername": "",
     "administrator": ""
   },
+  "rights": {
+    "user": {
+      "access": {
+        "tr": "paramaters.rights.access",
+        "code": 1
+      },
+      "administration": {
+        "tr": "parameters.rights.admin",
+        "code": 2
+      }
+    }
+  },
   "modules": {
     "news": {
       "limitPerPage": 10

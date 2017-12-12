@@ -1,0 +1,16 @@
+<footer>
+    {% if auth('user', 'administration') %}
+        <div class="row">
+            <div class="col-md-1 col-md-offset-4">
+                <a href=""><span class="label label-primary ">{{ tr('footer.admin') }}</span></a>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="row">
+        <div class="panel panel-default col-md-6 col-md-offset-2">
+            <p>{{ tr('footer.scs') }}<br>Copyright &copy; 2011 - 2017 SCS Software s.r.o.</p>
+            <p>Copyright &copy; Christophe Daloz - De Los Rios, 2017</p>
+        </div>
+    </div>
+</footer>

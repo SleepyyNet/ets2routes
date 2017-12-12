@@ -48,12 +48,22 @@
   "register": {
     "mail": "Inscription sur ETS2Routes"
   },
+  "footer": {
+    "scs": "Les noms de remorques, camions etc. proviennent du jeu <b>Euro Truck Simulator 2</b> et sont la propriété de SCS Software s.r.o.",
+    "admin": "Panneau d'administration"
+  },
   "modules": {
     "news": {
       "by": "Par",
       "the": "le",
       "cat": "Catégorie : ",
       "unknown": "inconnu"
+    }
+  },
+  "parameters": {
+    "rights": {
+      "access": "Accès au site",
+      "admin": "Administration du site"
     }
   }
 }

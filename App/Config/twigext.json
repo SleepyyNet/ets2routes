@@ -2,6 +2,7 @@
   "extensions": [
     "\\Twig_Extension_Debug",
     "App\\Kernel\\TwigExtensions\\BaseExtension",
-    "App\\Kernel\\TwigExtensions\\LangExtension"
+    "App\\Kernel\\TwigExtensions\\LangExtension",
+    "App\\Kernel\\TwigExtensions\\RightsExtension"
   ]
 }
