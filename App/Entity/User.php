@@ -31,7 +31,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="user",
  *     indexes={
- *      @ORM\Index(name="ikey_user_group", columns={"user_group"})
+ *      @ORM\Index(name="ikey_access", columns={"access"})
  *      },
  *     uniqueConstraints={
  *      @ORM\UniqueConstraint(name="ukey_login", columns={"login"}),
@@ -49,9 +49,9 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="integer", options={"unsigned"=true}, name="user_group")
+     * @ORM\Column(type="integer", options={"unsigned"=true}, name="access")
      */
-    private $userGroup;
+    private $access;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -117,18 +117,18 @@ class User
     /**
      * @return int
      */
-    public function getUserGroup()
+    public function getAccess()
     {
-        return $this->userGroup;
+        return $this->access;
     }
 
     /**
-     * @param int $userGroup
+     * @param int $access
      * @return User
      */
-    public function setUserGroup(int $userGroup)
+    public function setAccess(int $access)
     {
-        $this->userGroup = $userGroup;
+        $this->access = $access;
 
         return $this;
     }

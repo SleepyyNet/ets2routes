@@ -60,7 +60,7 @@ class News
     private $author;
 
     /**
-     * @ORM\Column(name="post_date", type="date")
+     * @ORM\Column(name="post_date", type="datetime")
      */
     private $postDate;
 
